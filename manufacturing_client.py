@@ -38,7 +38,7 @@ def process_order():
         process_button.config(state="disabled")
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect(('localhost', 5555))
+client_socket.connect(('10.12.81.217', 5555))
 client_socket.send('manufacturing'.encode('utf-8'))
 
 root = tk.Tk()

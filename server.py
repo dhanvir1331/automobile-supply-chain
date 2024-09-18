@@ -24,7 +24,7 @@ def broadcast(message, sender_type):
             socket.send(message.encode('utf-8'))
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(('localhost', 5555))
+server.bind(('10.12.81.217', 5555))
 server.listen(5)
 
 while True:
