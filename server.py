@@ -40,7 +40,7 @@ def broadcast(message, sender_type):
                 print(f"Error sending message to {client_type}: {e}")
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(('10.12.81.217', 5555))
+server.bind(('localhost', 5555))
 server.listen(5)
 print("Server is listening on port 5555")
 

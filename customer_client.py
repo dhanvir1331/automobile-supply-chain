@@ -19,12 +19,11 @@ def receive_notifications():
             if message:
                 order_id, order, status = message.split(':')
                 notification_listbox.insert(tk.END, f"Order ID: {order_id} - Status: {status}")
-                intermediary_listbox.insert(tk.END, f"Order ID: {order_id} - Status: {status}")
         except:
             break
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect(('10.12.81.217', 5555))
+client_socket.connect(('localhost', 5555))
 client_socket.send('customer'.encode('utf-8'))
 
 root = tk.Tk()
@@ -48,12 +47,6 @@ response_label.pack(pady=(0, 10))
 
 notification_listbox = tk.Listbox(left_frame, bg='#1E1E1E', fg='#FFFFFF', selectbackground='#007ACC', font=('Helvetica', 12))
 notification_listbox.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
-
-right_frame = tk.Frame(frame, bg='#2E2E2E', width=200)
-right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
-
-intermediary_listbox = tk.Listbox(right_frame, bg='#1E1E1E', fg='#FFFFFF', selectbackground='#007ACC', font=('Helvetica', 12))
-intermediary_listbox.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
 thread = threading.Thread(target=receive_notifications)
 thread.start()
