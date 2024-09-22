@@ -16,4 +16,11 @@ class Order(Base):
     status = Column(String, index=True)
     processed_by = Column(String, index=True)
 
+class RawMaterial(Base):
+    __tablename__ = 'raw_materials'
+    
+    id = Column(Integer, primary_key=True)
+    material_name = Column(String, unique=True)
+    quantity_available = Column(Integer)
+
 Base.metadata.create_all(bind=engine)

@@ -1,8 +1,10 @@
 import socket
 import tkinter as tk
+from tkinter import messagebox
 import threading
 from sqlalchemy.orm import Session
-from database import get_pending_orders, update_order_status, SessionLocal
+from database import get_pending_orders, update_order_status, check_raw_materials, SessionLocal
+from models import RawMaterial
 
 order_queue = []
 
@@ -29,13 +31,40 @@ def update_order_listbox():
 
 def process_order():
     if order_queue:
-        processed_order = order_queue.pop(0)
-        order_listbox.delete(0)
-        client_socket.send(f"{processed_order.id}:{processed_order.customer_order}:Manufactured".encode('utf-8'))
-        update_order_status(SessionLocal(), processed_order.id, "Processed", "Manufacturing")
-        update_order_listbox()
+        processed_order = order_queue[0]  # Check the first order in the queue
+        if check_raw_materials(processed_order.customer_order):  # Check if raw materials are sufficient
+            # Deduct raw materials
+            deduct_raw_materials(processed_order.customer_order)
+            order_queue.pop(0)
+            order_listbox.delete(0)
+            client_socket.send(f"{processed_order.id}:{processed_order.customer_order}:Manufactured".encode('utf-8'))
+            update_order_status(SessionLocal(), processed_order.id, "Processed", "Manufacturing")
+            update_order_listbox()
+            intermediary_listbox.insert(tk.END, f"Order ID: {processed_order.id} processed.")
+        else:
+            tk.messagebox.showwarning("Insufficient Materials", f"Cannot process Order ID: {processed_order.id}. Insufficient raw materials.")
     if not order_queue:
         process_button.config(state="disabled")
+
+def deduct_raw_materials(car_model):
+    required_materials = {
+        "Toyota Camry": ["Steel", "Glass", "Plastic"],
+        "Toyota Corolla": ["Steel", "Glass", "Plastic"],
+        "Toyota RAV4": ["Steel", "Glass", "Plastic", "Leather"],
+        "Toyota Highlander": ["Steel", "Glass", "Plastic", "Leather"],
+        "Toyota Tacoma": ["Steel", "Glass", "Plastic"]
+    }
+    
+    materials_needed = required_materials.get(car_model, [])
+    db = SessionLocal()
+    
+    for material in materials_needed:
+        raw_material = db.query(RawMaterial).filter(RawMaterial.material_name == material).one()
+        raw_material.quantity_available -= 1  # Deduct one unit for each material
+        db.add(raw_material)
+
+    db.commit()
+    db.close()
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect(('localhost', 5555))
