@@ -40,7 +40,7 @@ def process_order():
             client_socket.send(f"{processed_order.id}:{processed_order.customer_order}:Manufactured".encode('utf-8'))
             update_order_status(SessionLocal(), processed_order.id, "Processed", "Manufacturing")
             update_order_listbox()
-            intermediary_listbox.insert(tk.END, f"Order ID: {processed_order.id} processed.")
+            intermediary_listbox.insert(tk.END, f"Order ID: {processed_order.id} Manufactured.")
         else:
             tk.messagebox.showwarning("Insufficient Materials", f"Cannot process Order. Insufficient raw materials.")
     if not order_queue:
