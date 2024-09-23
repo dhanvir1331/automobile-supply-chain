@@ -42,7 +42,7 @@ def process_order():
             update_order_listbox()
             intermediary_listbox.insert(tk.END, f"Order ID: {processed_order.id} processed.")
         else:
-            tk.messagebox.showwarning("Insufficient Materials", f"Cannot process Order ID: {processed_order.id}. Insufficient raw materials.")
+            tk.messagebox.showwarning("Insufficient Materials", f"Cannot process Order. Insufficient raw materials.")
     if not order_queue:
         process_button.config(state="disabled")
 
