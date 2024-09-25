@@ -67,7 +67,7 @@ def deduct_raw_materials(car_model):
     db.close()
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect(('localhost', 5555))
+client_socket.connect(('10.12.84.250', 5555))
 client_socket.send('manufacturing'.encode('utf-8'))
 
 root = tk.Tk()
