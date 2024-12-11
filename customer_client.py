@@ -53,7 +53,7 @@ def receive_notifications():
             break
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect(('10.12.84.250', 5555))
+client_socket.connect(('<insert IP here', 5555))
 client_socket.send('customer'.encode('utf-8'))
 
 root = tk.Tk()
