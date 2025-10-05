@@ -2,16 +2,14 @@ import socket
 import tkinter as tk
 from tkinter import ttk
 import threading
-from sqlalchemy.orm import Session
 from database import create_order, SessionLocal
 from datetime import datetime, timedelta
 
 
 def calculate_eta():
-    # Assuming fixed times for each stage in minutes
-    manufacturing_time = 2  # Manufacturing takes 2 minutes
-    distribution_time = 3  # Distribution takes 3 minutes
-    showroom_time = 1  # Showroom takes 1 minute
+    manufacturing_time = 2
+    distribution_time = 3
+    showroom_time = 1
 
     total_time = manufacturing_time + distribution_time + showroom_time
     return total_time
@@ -22,7 +20,6 @@ def send_purchase_order():
     db = SessionLocal()
     db_order = create_order(db, selected_order)
 
-    # Calculate ETA
     total_eta = calculate_eta()
     eta_time = datetime.now() + timedelta(minutes=total_eta)
     eta_label.config(text=f"ETA: {eta_time.strftime('%H:%M:%S')}")
@@ -39,23 +36,17 @@ def receive_notifications():
             if message:
                 order_id, order, status = message.split(":")
                 if status == "Manufactured":
-                    # Update ETA when Manufacturing is done (e.g., reduce time by 2 minutes)
                     current_eta = datetime.strptime(
                         eta_label.cget("text").split(" ")[1], "%H:%M:%S"
                     )
-                    new_eta = current_eta - timedelta(
-                        minutes=2
-                    )  # Remove manufacturing time
+                    new_eta = current_eta - timedelta(minutes=2)
                     eta_label.config(text=f"ETA: {new_eta.strftime('%H:%M:%S')}")
 
                 if status == "Distributed":
-                    # Update ETA when Distribution is done (e.g., reduce time by 3 minutes)
                     current_eta = datetime.strptime(
                         eta_label.cget("text").split(" ")[1], "%H:%M:%S"
                     )
-                    new_eta = current_eta - timedelta(
-                        minutes=3
-                    )  # Remove distribution time
+                    new_eta = current_eta - timedelta(minutes=3)
                     eta_label.config(text=f"ETA: {new_eta.strftime('%H:%M:%S')}")
 
                 notification_listbox.insert(
@@ -64,8 +55,8 @@ def receive_notifications():
                 intermediary_listbox.insert(
                     tk.END, f"Order ID: {order_id} - Status: {status}"
                 )
-        except:
-            break
+        finally:
+            print(end="\n")
 
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -82,7 +73,6 @@ frame.pack(padx=20, pady=20, fill=tk.BOTH, expand=True)
 left_frame = tk.Frame(frame, bg="#2E2E2E")
 left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-# Dropdown (Combobox) for Toyota car selection
 order_options = [
     "Toyota Camry",
     "Toyota Corolla",

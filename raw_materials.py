@@ -1,18 +1,15 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from models import RawMaterial
 
-# Replace with your actual database URL
-DATABASE_URL = "sqlite:///supply_chain.db"  # Example for SQLite
+DATABASE_URL = "sqlite:///supply_chain.db"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
-
-# Import your RawMaterial model
-from models import RawMaterial  # Replace 'your_module' with the actual module name
 
 
 def display_raw_materials():
     db = SessionLocal()
-    raw_materials = db.query(RawMaterial).all()  # Get all rows in RawMaterial table
+    raw_materials = db.query(RawMaterial).all()
 
     for material in raw_materials:
         print(
@@ -22,5 +19,4 @@ def display_raw_materials():
     db.close()
 
 
-# Call the function to display the materials
 display_raw_materials()

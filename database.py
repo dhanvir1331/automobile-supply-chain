@@ -1,4 +1,3 @@
-# database.py
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import NoResultFound
 from models import Order, RawMaterial, SessionLocal
@@ -37,12 +36,11 @@ def check_raw_materials(car_model):
         "Toyota Tacoma": ["Steel", "Glass", "Plastic"],
     }
 
-    # Assuming we have a session already created
     db = SessionLocal()
 
     materials_needed = required_materials.get(car_model, [])
     if not materials_needed:
-        return True  # No materials required for unrecognized models
+        return True
 
     for material in materials_needed:
         try:
@@ -52,11 +50,11 @@ def check_raw_materials(car_model):
                 .one()
             )
             if raw_material.quantity_available <= 0:
-                return False  # Insufficient material
+                return False
         except NoResultFound:
-            return False  # Material not found in the inventory
+            return False
 
-    return True  # All required materials are available
+    return True
 
 
 def check_inventory_levels(threshold=100):

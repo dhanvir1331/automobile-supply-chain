@@ -1,13 +1,10 @@
+from models import RawMaterial
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-# Replace with your actual database URL
-DATABASE_URL = "sqlite:///supply_chain.db"  # Example for SQLite
+DATABASE_URL = "sqlite:///supply_chain.db"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
-
-# Import your RawMaterial model
-from models import RawMaterial  # Replace 'your_module' with the actual module name
 
 
 def populate_raw_materials():
@@ -31,5 +28,4 @@ def populate_raw_materials():
     print("Raw materials populated successfully.")
 
 
-# Call the function to populate the table
 populate_raw_materials()

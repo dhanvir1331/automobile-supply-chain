@@ -1,16 +1,12 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from database import (
     RawMaterial,
     SessionLocal,
-)  # Import your RawMaterial model and SessionLocal
+)
 
 
-# Function to increment the quantity of raw materials
 def increment_raw_material(material_name, increment_quantity):
     db = SessionLocal()
 
-    # Query the material by its name
     raw_material = (
         db.query(RawMaterial).filter(RawMaterial.material_name == material_name).first()
     )
@@ -28,7 +24,6 @@ def increment_raw_material(material_name, increment_quantity):
     db.close()
 
 
-# Example usage: Increment materials
 def increment_all_materials():
     materials_to_increment = [
         {"material_name": "Steel", "increment_quantity": 5},
@@ -43,6 +38,5 @@ def increment_all_materials():
         )
 
 
-# Run the increment function
 if __name__ == "__main__":
     increment_all_materials()

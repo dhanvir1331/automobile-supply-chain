@@ -1,8 +1,7 @@
 import socket
 import tkinter as tk
 import threading
-from sqlalchemy.orm import Session
-from database import get_pending_orders, update_order_status, SessionLocal
+from database import update_order_status, SessionLocal
 
 order_queue = []
 
@@ -24,8 +23,8 @@ def receive_order():
                 intermediary_listbox.insert(
                     tk.END, f"Order ID: {order_id} - Status: {status}"
                 )
-        except:
-            break
+        finally:
+            print("\n")
 
 
 def update_order_listbox():

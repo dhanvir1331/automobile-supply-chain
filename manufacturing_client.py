@@ -1,10 +1,7 @@
 import socket
 import tkinter as tk
-from tkinter import messagebox
 import threading
-from sqlalchemy.orm import Session
 from database import (
-    get_pending_orders,
     update_order_status,
     check_raw_materials,
     SessionLocal,
@@ -31,8 +28,8 @@ def receive_order():
                 intermediary_listbox.insert(
                     tk.END, f"Order ID: {order_id} - Status: {status}"
                 )
-        except:
-            break
+        finally:
+            print("\n")
 
 
 def update_order_listbox():
@@ -43,11 +40,8 @@ def update_order_listbox():
 
 def process_order():
     if order_queue:
-        processed_order = order_queue[0]  # Check the first order in the queue
-        if check_raw_materials(
-            processed_order.customer_order
-        ):  # Check if raw materials are sufficient
-            # Deduct raw materials
+        processed_order = order_queue[0]
+        if check_raw_materials(processed_order.customer_order):
             deduct_raw_materials(processed_order.customer_order)
             order_queue.pop(0)
             order_listbox.delete(0)
@@ -66,7 +60,7 @@ def process_order():
         else:
             tk.messagebox.showwarning(
                 "Insufficient Materials",
-                f"Cannot process Order. Insufficient raw materials.",
+                "Cannot process Order. Insufficient raw materials.",
             )
     if not order_queue:
         process_button.config(state="disabled")
@@ -88,7 +82,7 @@ def deduct_raw_materials(car_model):
         raw_material = (
             db.query(RawMaterial).filter(RawMaterial.material_name == material).one()
         )
-        raw_material.quantity_available -= 1  # Deduct one unit for each material
+        raw_material.quantity_available -= 1
         db.add(raw_material)
 
     db.commit()

@@ -33,7 +33,7 @@ def handle_client(client_socket, client_type):
 
 def broadcast(message, sender_type):
     print(f"Broadcasting message from {sender_type}: {message}")
-    for client_type, socket in clients.items():
+    for client_type, socket in clients.items():  # noqa: F402
         if client_type != sender_type and socket:
             try:
                 socket.send(message.encode("utf-8"))
