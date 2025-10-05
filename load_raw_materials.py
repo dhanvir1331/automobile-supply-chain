@@ -17,18 +17,19 @@ def populate_raw_materials():
         {"material_name": "Plastic", "quantity_available": 3},
         {"material_name": "Leather", "quantity_available": 2},
     ]
-    
+
     db = SessionLocal()
     for material in materials:
         raw_material = RawMaterial(
             material_name=material["material_name"],
-            quantity_available=material["quantity_available"]
+            quantity_available=material["quantity_available"],
         )
         db.add(raw_material)
-    
+
     db.commit()
     db.close()
     print("Raw materials populated successfully.")
+
 
 # Call the function to populate the table
 populate_raw_materials()

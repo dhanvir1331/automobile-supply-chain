@@ -9,6 +9,7 @@ engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
+
 class Order(Base):
     __tablename__ = "orders"
     id = Column(Integer, primary_key=True, index=True)
@@ -16,11 +17,13 @@ class Order(Base):
     status = Column(String, index=True)
     processed_by = Column(String, index=True)
 
+
 class RawMaterial(Base):
-    __tablename__ = 'raw_materials'
-    
+    __tablename__ = "raw_materials"
+
     id = Column(Integer, primary_key=True)
     material_name = Column(String, unique=True)
     quantity_available = Column(Integer)
+
 
 Base.metadata.create_all(bind=engine)
