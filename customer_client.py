@@ -26,7 +26,7 @@ def send_purchase_order():
 
     client_socket.send(f"{db_order.id}:{selected_order}:Ordered".encode("utf-8"))
     response_label.config(text=f"Order Placed: {selected_order}")
-    order_combobox.set("")  # Clear the selection
+    order_combobox.set("")
 
 
 def receive_notifications():

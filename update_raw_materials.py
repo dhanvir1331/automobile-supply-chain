@@ -12,7 +12,7 @@ def increment_raw_material(material_name, increment_quantity):
     )
 
     if raw_material:
-        raw_material.quantity_available += increment_quantity  # Increment the quantity
+        raw_material.quantity_available += increment_quantity
         db.add(raw_material)
         db.commit()
         print(
